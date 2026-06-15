@@ -1,103 +1,130 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>Comparing the United States</title>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.2/leaflet.css">
-		<link rel="stylesheet" href="styles.css" />
-		
-		<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
-		<link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.3/css/select.dataTables.min.css" />
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css" />
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script type="text/javascript" src="jquery.csv.js"></script>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<!--<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-	<script src="https://cdn.datatables.net/buttons/1.4.2/js/dataTables.buttons.min.js"></script>
-	<script src="https://cdn.datatables.net/buttons/1.4.2/js/buttons.flash.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
-	<script src="https://cdn.datatables.net/buttons/1.4.2/js/buttons.html5.min.js"></script>
-	<script src="https://cdn.datatables.net/buttons/1.4.2/js/buttons.print.min.js"></script>
-	<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>-->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- Open Graph -->
+	<meta property="og:title" content="Comparing the United States" />
+	<meta property="og:description" content="An interactive state-by-state comparison of temperature, precipitation, population density, wages, and more." />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://us-comparison.netlify.app/" />
+	<meta property="og:image" content="https://us-comparison.netlify.app/og-image.jpg" />
+	<meta property="og:image:alt" content="A map of the United States" />
+	<meta property="og:site_name" content="Comparing the United States" />
 
-     <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
-	<script src="https://www.amcharts.com/lib/3/serial.js"></script>
-	<script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+	<!-- Twitter Card -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Comparing the United States" />
+	<meta name="twitter:description" content="An interactive state-by-state comparison of temperature, precipitation, population density, wages, and more." />
+	<meta name="twitter:image" content="https://us-comparison.netlify.app/og-image.jpg" />
+	<meta name="description" content="An interactive state-by-state comparison of temperature, precipitation, population density, wages, and more across all 50 US states." />
+	<link rel="icon" href="favicon.ico" />
+	<title>Comparing the United States</title>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+	<link rel="stylesheet" href="styles.css" />
 
-		
-	</head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script type="text/javascript" src="jquery.csv.js"></script>
+
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+	<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+	<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+</head>
+
 <body>
-	<div style=" height: 100vh;">
-		<div style="position:fixed; z-index:5; width: 100%; background: #FFF; left: 0px; top: 0px; padding: 5px; margin-top: 10px; padding-left: 15px;">
-			<img src="flag.png" width=75 height=50 style="float:left;"/>  
+	<div style="height: 100vh; pointer-events: none;">
+		<div id="topBar">
 			<div class="dropdown">
-			  <button class="dropbtn">Compare the</br>states by...</button>
+			  <button class="dropbtn" tabindex="0" aria-haspopup="true">Compare<br class="mobile-br"> states by…</button>
 			  <div class="dropdown-content">
-				<a href="#" onclick="setdata(1)">Average Temperature</a>
-				<a href="#" onclick="setdata(2)">Annual Precipitation</a>
-				<a href="#" onclick="setdata(3)">Population Density</a>
-				<a href="#" onclick="setdata(4)">Median Wage</a>
-				<a href="#" onclick="setdata(5)">Cost of Living</a>
-				<a href="#" onclick="setdata(6)">Median Home Value</a>
+				<div class="dropdown-group-label">Climate &amp; Environment</div>
+				<a href="#" onclick="setdata(1)">Average Temperature (1971–2000)</a>
+				<a href="#" onclick="setdata(2)">Annual Precipitation (1971–2000)</a>
+				<a href="#" onclick="setdata(7)">Clear Days per Year (NOAA avg)</a>
+				<a href="#" onclick="setdata(8)">Natural Disaster Risk — EAL Score (Dec 2025)</a>
+				<div class="dropdown-group-label">Economy &amp; Housing</div>
+				<a href="#" onclick="setdata(4)">Median Hourly Wage (2025)</a>
+				<a href="#" onclick="setdata(5)">Cost of Living Adj. Income (2025)</a>
+				<a href="#" onclick="setdata(9)">Cost of Living Index (2026 Q1)</a>
+				<a href="#" onclick="setdata(6)">Median Home Value (2025)</a>
+				<a href="#" onclick="setdata(16)">GDP per Capita (2025)</a>
+				<div class="dropdown-group-label">Demographics &amp; Society</div>
+				<a href="#" onclick="setdata(3)">Population Density (2023)</a>
+				<a href="#" onclick="setdata(10)">Median Age (2023)</a>
+				<a href="#" onclick="setdata(11)">Urban Population % (2020)</a>
+				<a href="#" onclick="setdata(12)">College Attainment Rate (2023)</a>
+				<div class="dropdown-group-label">Health &amp; Safety</div>
+				<a href="#" onclick="setdata(13)">Life Expectancy (2021)</a>
+				<a href="#" onclick="setdata(14)">Violent Crime Rate (2022)</a>
+				<div class="dropdown-group-label">Fun Facts</div>
+				<a href="#" onclick="setdata(15)">Pro Sports Teams (2025)</a>
 			  </div>
 			</div>
-			<h1 style="text-align:center; margin:15px;">Comparing the United States</h1>
-		</div>
-		<!--<div style="z-index:5; position:relative; left:250px; top:20px;">&#8592;Click here to change the map</div>-->
-
-	</div>
-
-	<div id="map" style="z-index:1;"></div>
-	
-<div style="position:relative; float:right; z-index:5; bottom:50px; right:10px;"><a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | &copy;
-	    <a href="http://www.openstreetmap.org/copyright">Openstreetmap</a> contributors</div>
-
-<div style="bottom:10px; position:absolute; z-index:2000;">
-		<button onclick="openClose()" type="button" class="btn btn-primary deshbtn">Show/Hide Chart</button>
-	</div>
-
-
-<div id="dataDIV" style="height: 400px; padding-top:10px; width: 100%; bottom:6%; position:absolute; z-index:100; border-radius: 4px; display:none; background: rgba(255,255,255,0.75);">
-			<a onclick="openClose()" type="button" style="right:10px; top:9px; cursor:pointer; position:absolute; z-index: 5;"><img src="close.png"/></a>
-			<div class="maindiv">
-			<div id="chartdiv" style="width:100%;"></div>
-			<div id="chartdata"></div>
+			<div id="titleBlock">
+				<h1>Comparing the United States</h1>
+				<p id="titleSub">An interactive state-by-state comparison</p>
+			</div>
+			<img src="flag.png" width="75" height="50" alt="US flag" style="border-radius: 5px; flex-shrink: 0;" />
 		</div>
 	</div>
-		
-		
-<center>
-<button id="downClick" style="bottom:15px; border: 1px #FFF solid; border-radius: 50px; height: 30px; width: 30px; background-color: #00a2d4;color: #FFF;
-font-weight: 900;position: absolute; cursor:pointer; z-index: 2001;">&#709 </button></center>
-	<!--<div style="padding-top:50px; width: 80%; background-color: #FFF; position: absolute;
-padding: 10px; border-radius: 4px;">-->
 
-<div id="text" style="padding:70px; background-color:#FFF; position: absolute; left: 0; z-index:1;">
+	<div id="map"></div>
+	<div id="scrollCue">
+		<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+	</div>
 
-		<h2>State Comparison</h2>
-<p class="text1">This website can be used to compare the quality of life in each state. What is your ideal place to live? The background graph can be changed with the button at the top. When looking at the shaded states, a darker color means a higher value.</p>
-<p class="text1">Information for this demo has been obtained from the following sites:</p>
-<ul><li><a href="https://www.amcharts.com/demos/simple-column-chart/">simple bar chart</a></li>
-	<li><a href="https://leafletjs.com/examples/choropleth/">US geoJSON/geolocation data source</a></li>
-	<li><a href="https://www.igismap.com/portfolio/climate/">igismap example</a> (similar to this site, but with some major changes)</li>
-	<li><a href="https://www.currentresults.com/Weather/US/average-annual-state-precipitation.php">Precipitation and temperature</a></li>
-	<li><a href="https://state.1keydata.com/state-population-density.php">Population density</a></li>
-	<li><a href="https://www.governing.com/gov-data/wage-average-median-pay-data-for-states.html">Median Hourly Wages</a></li>
-	<li><a href="https://www.usatoday.com/story/money/economy/2018/05/10/cost-of-living-value-of-dollar-in-every-state/34567549/">Cost of living and home prices</a></li>
-	<li><a href="https://github.com/timwis/leaflet-choropleth">choropleth/shading example</a></li></ul>
-	
-<p class="text1">My other websites are accessible from <a href="https://kevindprice.github.io">here</a>.</p>
-<button id="upClick" style="border: 1px #FFF solid; border-radius: 50px; height: 30px; width: 30px; background-color: #00a2d4;color: #FFF;
-font-weight: 900; cursor:pointer; position:absolute;left:50%; z-index:2500; bottom:5px;">&#708</button>
-</div>
-	
-	
-		<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+	<div id="chartHeader">
+		<div id="chartHeaderMain">
+			<div id="chartLabel">Currently viewing</div>
+			<div id="chartTitle"></div>
+		</div>
+		<div id="chartButtons">
+			<button id="toggleTopBottom" onclick="toggleTopBottomView()">Show top / bottom 10</button>
+			<button id="toggleTable" onclick="toggleTableView()">Show table</button>
+		</div>
+	</div>
+	<div id="topBottomNote">Showing top 10 and bottom 10 states only</div>
+	<div id="dcOutlierNote">DC ($277,689) excluded from chart as a statistical outlier — it still appears on the map.</div>
+
+	<div id="dataDIV">
+		<div class="maindiv">
+			<div id="chartdiv"></div>
+			<div id="chartdata" style="display:none;"></div>
+		</div>
+	</div>
+
+	<div id="text">
+		<h2>State comparison</h2>
+		<p>Use this site to compare quality of life across the United States. A darker shade on the map means a higher value for the selected metric. Change the metric using the menu above.</p>
+		<p>Data sources:</p>
+		<div class="source-pills">
+			<a class="source-pill" target="_blank" rel="noopener noreferrer" href="https://www.currentresults.com/Weather/US/average-annual-state-temperatures.php">Precipitation &amp; temperature</a>
+			<a class="source-pill" target="_blank" rel="noopener noreferrer" href="https://www.currentresults.com/Weather/US/average-annual-sunshine-by-state.php">Sunny days</a>
+			<a class="source-pill" target="_blank" rel="noopener noreferrer" href="https://www.fema.gov/about/openfema/data-sets/national-risk-index-data">Natural disaster risk — EAL Score (FEMA NRI)</a>
+			<a class="source-pill" target="_blank" rel="noopener noreferrer" href="https://www.census.gov/data/tables/time-series/dec/density-data-text.html">Population density</a>
+			<a class="source-pill" target="_blank" rel="noopener noreferrer" href="https://www.bls.gov/oes/tables.htm">Median hourly wages</a>
+			<a class="source-pill" target="_blank" rel="noopener noreferrer" href="https://apps.bea.gov/scb/issues/2024/05-may/0524-regional-price-parities.htm">Cost-of-living adj. income</a>
+			<a class="source-pill" target="_blank" rel="noopener noreferrer" href="https://meric.mo.gov/data/cost-living-data-series">Cost of living index (MERIC)</a>
+			<a class="source-pill" target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/List_of_U.S._states_by_median_home_price">Median home values</a>
+			<a class="source-pill" target="_blank" rel="noopener noreferrer" href="https://www.bea.gov/data/gdp/gdp-state">GDP per capita (BEA)</a>
+			<a class="source-pill" target="_blank" rel="noopener noreferrer" href="https://www.cdc.gov/nchs/pressroom/sosmap/life_expectancy/life_expectancy.htm">Life expectancy (CDC)</a>
+			<a class="source-pill" target="_blank" rel="noopener noreferrer" href="https://ucr.fbi.gov/crime-in-the-u.s">Violent crime rate (FBI UCR)</a>
+			<a class="source-pill" target="_blank" rel="noopener noreferrer" href="https://www.census.gov/topics/population/age-and-sex.html">Median age &amp; urban population (Census)</a>
+			<a class="source-pill" target="_blank" rel="noopener noreferrer" href="https://www.census.gov/topics/education/educational-attainment.html">College attainment (Census)</a>
+		</div>
+		<p>See my other websites <a href="https://kevin-price.github.io" target="_blank" rel="noopener noreferrer">here</a>.</p>
+	</div>
+
+		<script>
+			window.addEventListener('scroll', function() {
+				if (window.scrollY > 20) {
+					document.getElementById('scrollCue').classList.add('hidden');
+				}
+			}, { passive: true });
+		</script>
+		<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 		<script src="choropleth.js"></script>
 		<script src="demo.js"></script>
-	</body>
+</body>
 </html>
