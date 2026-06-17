@@ -196,6 +196,7 @@ function graph(valueField, valueTitle) {
   currentValueTitle = valueTitle;
 
   document.getElementById('chartTitle').textContent = valueTitle.trim();
+  document.getElementById('mapLabel').textContent = valueTitle.trim();
 
   var isGDP = valueField === 'GDP Per Capita';
   var dcNote = document.getElementById('dcOutlierNote');
