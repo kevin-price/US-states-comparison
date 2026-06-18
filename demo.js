@@ -4,6 +4,11 @@ map.scrollWheelZoom.disable();
 if (L.Browser.touch) {
   map.dragging.disable();
 }
+map.on('popupopen', function() {
+  var hint = document.getElementById('mapHint');
+  if (hint) hint.classList.add('hidden');
+});
+
 var usBounds = [[24, -125], [50, -66]];
 window.addEventListener('resize', function() {
   map.invalidateSize();
