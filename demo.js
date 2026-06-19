@@ -167,6 +167,8 @@ function setdata(value) {
 					 changeChoropleth("Pro Sports Teams", " teams", "Pro Sports Teams"); }
 	if(value===16) { graph("GDP Per Capita", "GDP per Capita, 2025 — Current Dollars (BEA)");
 					 changeChoropleth("GDP Per Capita", " $", "GDP per Capita"); }
+	if(value===17) { graph("Womens Pro Sports Teams", "Women's Pro Sports Teams (WNBA/NWSL)");
+					 changeChoropleth("Womens Pro Sports Teams", " teams", "Women's Pro Sports Teams"); }
 }
 	
 var showTopBottom = false;
@@ -317,14 +319,22 @@ function generateDataTable(chartData, valueField, valueTitle) {
 
   var container = document.getElementById('chartdata');
   var html = '<table><thead><tr>' +
-    '<th class="sortable" onclick="sortTable(\'state\',\'' + valueField + '\',\'' + valueTitle + '\')" title="Sort by state">State' + stateArrow + '</th>' +
-    '<th class="sortable" onclick="sortTable(\'value\',\'' + valueField + '\',\'' + valueTitle + '\')" title="Sort by value">' + valueTitle + valueArrow + '</th>' +
+    '<th class="sortable" data-sort-col="state" title="Sort by state">State' + stateArrow + '</th>' +
+    '<th class="sortable" data-sort-col="value" title="Sort by value"></th>' +
     '</tr></thead><tbody>';
   for (var i = 0; i < sorted.length; i++) {
     html += '<tr><td class="row-title">' + sorted[i].State + '</td><td>' + sorted[i][valueField] + '</td></tr>';
   }
   html += '</tbody></table>';
   container.innerHTML = html;
+
+  container.querySelector('th[data-sort-col="value"]').textContent = valueTitle + valueArrow;
+
+  container.querySelectorAll('th.sortable').forEach(function(th) {
+    th.addEventListener('click', function() {
+      sortTable(th.getAttribute('data-sort-col'), valueField, valueTitle);
+    });
+  });
 }
 
 function sortTable(col, valueField, valueTitle) {
