@@ -75,8 +75,9 @@ body {
 
 .dropbtn-chevron {
   display: inline-block;
-  margin-left: 2px;
-  font-size: 10px;
+  margin-left: 4px;
+  font-size: 14px;
+  vertical-align: -1px;
 }
 
 .dropdown:hover .dropbtn {
