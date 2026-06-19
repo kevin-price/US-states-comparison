@@ -64,10 +64,29 @@ body {
   cursor: pointer;
   line-height: 1.4;
   white-space: nowrap;
+  box-shadow: 0 0 0 0 rgba(45, 122, 58, 0.65);
+  animation: dropbtnPulse 1.8s ease-out infinite;
+}
+
+.dropbtn.no-pulse {
+  animation: none;
+  box-shadow: none;
+}
+
+.dropbtn-chevron {
+  display: inline-block;
+  margin-left: 2px;
+  font-size: 10px;
 }
 
 .dropdown:hover .dropbtn {
   background: #225e2c;
+}
+
+@keyframes dropbtnPulse {
+  0% { box-shadow: 0 0 0 0 rgba(45, 122, 58, 0.65); }
+  70% { box-shadow: 0 0 0 12px rgba(45, 122, 58, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(45, 122, 58, 0); }
 }
 
 .dropdown-content {

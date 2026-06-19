@@ -139,7 +139,7 @@ function setdata(value) {
 					changeChoropleth("Avg F", "°F", "Avg. Temp (°F)"); }
 	if(value===2) { graph("Millimeters", "Yearly Millimeters of Precipitation");
 					changeChoropleth("Millimeters", " mm/yr", "Precipitation (mm/yr)"); }
-	if(value===3) { graph("Density", "Density (People per Square Mile)");
+	if(value===3) { graph("Density", "Population Density (People per Square Mile)");
 					changeChoropleth("Density", " people/mi²", "Pop. Density (mi²)"); }
 	if(value===4) { graph("2025 Median Hourly Wage", "2025 Median Hourly Wage (BLS)");
 					changeChoropleth("2025 Median Hourly Wage", " $/hr", "Median Wage ($/hr)"); }
@@ -203,11 +203,23 @@ function graph(valueField, valueTitle) {
   document.getElementById('chartTitle').textContent = valueTitle.trim();
   document.getElementById('mapLabel').textContent = valueTitle.trim();
 
-  var isGDP = valueField === 'GDP Per Capita';
+  var dcOutlierFields = { 'GDP Per Capita': '$', 'Density': ' people/mi²' };
+  var isOutlier = dcOutlierFields.hasOwnProperty(valueField);
   var dcNote = document.getElementById('dcOutlierNote');
-  if (dcNote) dcNote.style.display = isGDP ? 'block' : 'none';
+  if (dcNote) {
+    if (isOutlier) {
+      var dcRow = data.filter(function(d) { return d.State === 'District of Columbia'; })[0];
+      var dcFormatted = dcRow ? Number(dcRow[valueField]).toLocaleString() : '';
+      var unit = dcOutlierFields[valueField];
+      var dcText = unit === '$' ? ('$' + dcFormatted) : (dcFormatted + unit);
+      dcNote.textContent = 'DC (' + dcText + ') excluded from chart as a statistical outlier — it still appears on the map.';
+      dcNote.style.display = 'block';
+    } else {
+      dcNote.style.display = 'none';
+    }
+  }
 
-  var chartData = isGDP ? data.filter(function(d) { return d.State !== 'District of Columbia'; }) : data;
+  var chartData = isOutlier ? data.filter(function(d) { return d.State !== 'District of Columbia'; }) : data;
   if (showTopBottom) {
     var sorted = chartData.slice().sort(function(a, b) {
       return parseFloat(a[valueField]) - parseFloat(b[valueField]);

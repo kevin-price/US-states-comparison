@@ -45,7 +45,7 @@
 	<div style="height: 100vh; pointer-events: none;">
 		<div id="topBar">
 			<div class="dropdown">
-			  <button class="dropbtn" tabindex="0" aria-haspopup="true">Compare<br class="mobile-br"> states by…</button>
+			  <button class="dropbtn" id="dropbtn" tabindex="0" aria-haspopup="true">Compare<br class="mobile-br"> states by… <span class="dropbtn-chevron">▾</span></button>
 			  <div class="dropdown-content">
 				<div class="dropdown-group-label">Climate &amp; Environment</div>
 				<a href="#" onclick="setdata(1)">Average Temperature (1971–2000)</a>
@@ -136,6 +136,13 @@
 					document.getElementById('scrollCue').classList.add('hidden');
 				}
 			}, { passive: true });
+
+			var dropbtn = document.getElementById('dropbtn');
+			['mouseenter', 'focus', 'click'].forEach(function(evt) {
+				dropbtn.addEventListener(evt, function() {
+					dropbtn.classList.add('no-pulse');
+				});
+			});
 		</script>
 		<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 		<script src="choropleth.js"></script>
