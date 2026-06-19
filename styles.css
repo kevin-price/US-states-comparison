@@ -102,6 +102,8 @@ body {
   left: 0;
   padding-top: 4px;
   overflow: hidden;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 .dropdown-group-label {
@@ -544,6 +546,14 @@ br.mobile-br { display: none; }
     padding: 32px 24px;
   }
   br.mobile-br { display: block; }
-  .dropbtn { white-space: normal; text-align: left; }
+  .dropbtn {
+    white-space: normal;
+    text-align: left;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .dropbtn-chevron {
+    font-size: 12px;
+  }
   #chartButtons { display: flex; flex-direction: column; gap: 6px; }
 }

@@ -143,6 +143,21 @@
 					dropbtn.classList.add('no-pulse');
 				});
 			});
+
+			function updateDropdownMaxHeight() {
+				var dropdownContent = document.querySelector('.dropdown-content');
+				if (!dropdownContent) return;
+				var rect = dropbtn.getBoundingClientRect();
+				var viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+				var available = viewportHeight - rect.bottom - 12;
+				dropdownContent.style.maxHeight = Math.max(150, available) + 'px';
+			}
+			updateDropdownMaxHeight();
+			window.addEventListener('resize', updateDropdownMaxHeight);
+			window.addEventListener('orientationchange', updateDropdownMaxHeight);
+			if (window.visualViewport) {
+				window.visualViewport.addEventListener('resize', updateDropdownMaxHeight);
+			}
 		</script>
 		<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 		<script src="choropleth.js"></script>
